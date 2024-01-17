@@ -7,8 +7,8 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon",
+    "lint": "eslint ."
   },
   "husky": {
     "hooks": {
@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/olegdemchenko/chat-app#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "nodemon": "^3.0.2",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "typeorm": "^0.3.19",
@@ -47,6 +47,8 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11.1.0",
     "husky": "^8.0.3",
-    "prettier": "^3.1.1"
+    "nodemon": "^3.0.3",
+    "prettier": "^3.1.1",
+    "ts-node": "^10.9.2"
   }
 }
