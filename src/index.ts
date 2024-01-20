@@ -13,10 +13,6 @@ dataSource
     const app = express();
     app.use(express.json());
 
-    app.get("/", (request, response) => {
-      response.json({ message: "Hello https world" });
-    });
-
     const server = https.createServer(
       {
         key: readFileSync(path.join(__dirname, "cert", "key.pem")),
