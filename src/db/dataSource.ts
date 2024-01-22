@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
+import User from "./entities/User";
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ export default new DataSource({
   password: process.env.POSTGRES_PASSWORD,
   synchronize: true,
   logging: true,
-  entities: [],
+  entities: [User],
   migrations: [],
   subscribers: [],
 });
