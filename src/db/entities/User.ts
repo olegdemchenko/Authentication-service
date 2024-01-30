@@ -12,8 +12,16 @@ class User {
   })
   name: string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   password: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  googleId: string;
 }
 
 export default User;
