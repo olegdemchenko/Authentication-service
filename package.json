@@ -7,6 +7,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
+    "migrate": "npx typeorm-ts-node-commonjs migration:run -d src/db/dataSource.ts",
     "dev": "nodemon",
     "lint": "eslint ."
   },

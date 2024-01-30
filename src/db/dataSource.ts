@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
 import User from "./entities/User";
+import { AddGoogleIdField1706544272830 } from "./migrations/1706544272830-AddGoogleIdField";
 
 dotenv.config();
 
@@ -15,6 +16,6 @@ export default new DataSource({
   synchronize: true,
   logging: true,
   entities: [User],
-  migrations: [],
+  migrations: [AddGoogleIdField1706544272830],
   subscribers: [],
 });
