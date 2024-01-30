@@ -4,10 +4,12 @@ import bcrypt from "bcrypt";
 import _ from "lodash";
 import { CustomRequest } from "../types";
 import local from "../authStrategies/local";
+import google from "../authStrategies/google";
 import dataSource from "../db/dataSource";
 import User from "../db/entities/User";
 
 passport.use(local);
+passport.use(google);
 
 type RequestUser = Express.User & { id: number };
 
@@ -68,7 +70,7 @@ class AuthController {
     res: Response,
     next: NextFunction
   ) => {
-    passport.authenticate("local", (err: Error, user: User | null) => {
+    passport.authenticate("local", (err: Error | null, user: User | null) => {
       if (err) {
         return next(err);
       }
@@ -91,6 +93,32 @@ class AuthController {
       }
       res.status(200).json({ status: "success" });
     });
+  };
+
+  google = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate("google", { scope: ["profile", "email"] })(
+      req,
+      res,
+      next
+    );
+  };
+
+  googleCallback = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "google",
+      { failureRedirect: "/api/auth/login" },
+      (err: Error | null, user: User) => {
+        if (err) {
+          return next(err);
+        }
+        req.logIn(user, (loginErr) => {
+          if (err) {
+            return next(loginErr);
+          }
+          res.status(200).json(_.pick(user, ["name"]));
+        });
+      }
+    )(req, res, next);
   };
 }
 

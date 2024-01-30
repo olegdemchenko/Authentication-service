@@ -33,5 +33,6 @@ module.exports = {
     "class-methods-use-this": ["warn"],
     "@typescript-eslint/no-unsafe-call": ["off"],
     "@typescript-eslint/no-misused-promises": ["off"],
+    "import/prefer-default-export": ["off"],
   },
 };
