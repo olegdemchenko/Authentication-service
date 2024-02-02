@@ -12,6 +12,8 @@ router
   .get(
     "/google-redirect",
     AuthController.googleCallback as unknown as RequestHandler
-  );
+  )
+  .get("/facebook", AuthController.facebook)
+  .get("/facebook-redirect", AuthController.facebookCallback);
 
 export default router;

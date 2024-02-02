@@ -5,11 +5,13 @@ import _ from "lodash";
 import { CustomRequest } from "../types";
 import local from "../authStrategies/local";
 import google from "../authStrategies/google";
+import facebook from "../authStrategies/facebook";
 import dataSource from "../db/dataSource";
 import User from "../db/entities/User";
 
 passport.use(local);
 passport.use(google);
+passport.use(facebook);
 
 type RequestUser = Express.User & { id: number };
 
@@ -106,6 +108,28 @@ class AuthController {
   googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
       "google",
+      { failureRedirect: "/api/auth/login" },
+      (err: Error | null, user: User) => {
+        if (err) {
+          return next(err);
+        }
+        req.logIn(user, (loginErr) => {
+          if (err) {
+            return next(loginErr);
+          }
+          res.status(200).json(_.pick(user, ["name"]));
+        });
+      }
+    )(req, res, next);
+  };
+
+  facebook = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate("facebook")(req, res, next);
+  };
+
+  facebookCallback = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "facebook",
       { failureRedirect: "/api/auth/login" },
       (err: Error | null, user: User) => {
         if (err) {

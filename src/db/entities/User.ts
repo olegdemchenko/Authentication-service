@@ -13,15 +13,21 @@ class User {
   name: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   password: string;
 
   @Column({
-    type: 'varchar',
-    nullable: true
+    type: "varchar",
+    nullable: true,
   })
   googleId: string;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  facebookId: string;
 }
 
 export default User;
