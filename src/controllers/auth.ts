@@ -15,6 +15,20 @@ passport.use(facebook);
 
 type RequestUser = Express.User & { id: number };
 
+const handleLogin = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  user: User
+) => {
+  req.logIn(user, (err) => {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json(_.pick(user, ["name"]));
+  });
+};
+
 passport.serializeUser((user, cb) => {
   const currentUser = user as RequestUser;
   process.nextTick(() => {
@@ -58,13 +72,7 @@ class AuthController {
     newUser.name = username;
     newUser.password = hashedPassword;
     await this.userRepository.save(newUser);
-
-    req.logIn(newUser, (err) => {
-      if (err) {
-        return next(err);
-      }
-      res.status(200).json(_.pick(newUser, ["name"]));
-    });
+    handleLogin(req, res, next, newUser);
   };
 
   login = (
@@ -79,12 +87,7 @@ class AuthController {
       if (!user) {
         return res.status(404).json({ status: "not found" });
       }
-      req.logIn(user, (loginErr) => {
-        if (err) {
-          return next(loginErr);
-        }
-        res.status(200).json(_.pick(user, ["name"]));
-      });
+      handleLogin(req, res, next, user);
     })(req, res, next);
   };
 
@@ -113,12 +116,7 @@ class AuthController {
         if (err) {
           return next(err);
         }
-        req.logIn(user, (loginErr) => {
-          if (err) {
-            return next(loginErr);
-          }
-          res.status(200).json(_.pick(user, ["name"]));
-        });
+        handleLogin(req, res, next, user);
       }
     )(req, res, next);
   };
@@ -135,12 +133,7 @@ class AuthController {
         if (err) {
           return next(err);
         }
-        req.logIn(user, (loginErr) => {
-          if (err) {
-            return next(loginErr);
-          }
-          res.status(200).json(_.pick(user, ["name"]));
-        });
+        handleLogin(req, res, next, user);
       }
     )(req, res, next);
   };
