@@ -6,8 +6,7 @@ import {
   VerifyCallback,
 } from "passport-google-oauth20";
 import dotenv from "dotenv";
-import dataSource from "../db/dataSource";
-import User from "../db/entities/User";
+import verifyProfile from "./verifyProfile";
 
 dotenv.config();
 
@@ -26,16 +25,6 @@ export default new GoogleStrategy(
     profile: Profile,
     done: VerifyCallback
   ) => {
-    const userRepository = dataSource.getRepository(User);
-    const user = await userRepository.findOne({ where: { googleId: profile.id } });
-    if (!user) {
-      const newUser = new User();
-      newUser.name = profile.displayName;
-      newUser.googleId = profile.id;
-      await userRepository.save(newUser);
-      done(null, newUser);
-    } else {
-      done(null, user);
-    }
+    await verifyProfile("google", profile, done);
   }
 );

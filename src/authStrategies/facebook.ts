@@ -2,8 +2,7 @@ import { Request } from "express";
 import { VerifyCallback } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy, Profile } from "passport-facebook";
 import dotenv from "dotenv";
-import dataSource from "../db/dataSource";
-import User from "../db/entities/User";
+import verifyProfile from "./verifyProfile";
 
 dotenv.config();
 
@@ -21,18 +20,6 @@ export default new FacebookStrategy(
     profile: Profile,
     done: VerifyCallback
   ) => {
-    const userRepository = dataSource.getRepository(User);
-    const user = await userRepository.findOne({
-      where: { facebookId: profile.id },
-    });
-    if (!user) {
-      const newUser = new User();
-      newUser.name = profile.displayName;
-      newUser.facebookId = profile.id;
-      await userRepository.save(newUser);
-      done(null, newUser);
-    } else {
-      done(null, user);
-    }
+    await verifyProfile("facebook", profile, done);
   }
 );
