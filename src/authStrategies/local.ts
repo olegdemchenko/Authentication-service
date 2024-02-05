@@ -18,6 +18,9 @@ export default new LocalStrategy((username, password, done) => {
         if (!same) {
           return done(null, false);
         }
+        if (!user.isVerified) {
+          return done(null, false);
+        }
         return done(null, user);
       });
     })

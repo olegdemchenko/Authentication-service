@@ -28,6 +28,18 @@ class User {
     nullable: true,
   })
   facebookId: string;
+
+  @Column({
+    type: "boolean",
+    default: false,
+  })
+  isVerified: boolean;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  email: string;
 }
 
 export default User;

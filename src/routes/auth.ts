@@ -6,6 +6,7 @@ const router = Router();
 router
   .get("/me", AuthController.me as unknown as RequestHandler)
   .post("/signup", AuthController.signUp as unknown as RequestHandler)
+  .get("/verify-email", AuthController.verifyEmail)
   .post("/login", AuthController.login as unknown as RequestHandler)
   .post("/logout", AuthController.logout as unknown as RequestHandler)
   .get("/google", AuthController.google as unknown as RequestHandler)
