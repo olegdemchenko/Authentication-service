@@ -140,7 +140,11 @@ class AuthController {
     });
   };
 
-  google = (req: Request, res: Response, next: NextFunction) => {
+  authenticateGoogleAccount = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     passport.authenticate("google", { scope: ["profile", "email"] })(
       req,
       res,
@@ -148,7 +152,11 @@ class AuthController {
     );
   };
 
-  googleCallback = (req: Request, res: Response, next: NextFunction) => {
+  handleGoogleAuthRedirect = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     passport.authenticate(
       "google",
       { failureRedirect: "/api/auth/login" },
@@ -161,11 +169,19 @@ class AuthController {
     )(req, res, next);
   };
 
-  facebook = (req: Request, res: Response, next: NextFunction) => {
+  authenticateFacebookAccount = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     passport.authenticate("facebook")(req, res, next);
   };
 
-  facebookCallback = (req: Request, res: Response, next: NextFunction) => {
+  handleFacebookAuthRedirect = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     passport.authenticate(
       "facebook",
       { failureRedirect: "/api/auth/login" },
