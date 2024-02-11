@@ -10,12 +10,8 @@
     "migrate": "npx typeorm-ts-node-commonjs migration:run -d src/db/dataSource.ts",
     "dev": "nodemon",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ." 
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:fix && git add -A ."
-    }
+    "lint:fix": "eslint --fix .",
+    "prepare": "npx husky install"
   },
   "repository": {
     "type": "git",
