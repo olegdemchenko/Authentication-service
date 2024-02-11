@@ -3,11 +3,11 @@ import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 export class AddGoogleIdField1706544272830 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
-      'user',
+      "user",
       new TableColumn({
         name: "googleId",
         type: "varchar",
-      })
+      }),
     );
   }
 

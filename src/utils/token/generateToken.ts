@@ -18,7 +18,7 @@ async function generateToken(payload: {
         } else {
           resolve(token!);
         }
-      }
+      },
     );
   });
 }
