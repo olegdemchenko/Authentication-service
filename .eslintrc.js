@@ -29,5 +29,10 @@ module.exports = {
       "error",
       { ignores: ["modules"] },
     ],
+    "consistent-return": ["warn"],
+    "class-methods-use-this": ["warn"],
+    "@typescript-eslint/no-unsafe-call": ["off"],
+    "@typescript-eslint/no-misused-promises": ["off"],
+    "import/prefer-default-export": ["off"],
   },
 };
