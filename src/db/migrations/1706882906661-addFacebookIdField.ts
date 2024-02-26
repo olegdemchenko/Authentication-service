@@ -7,7 +7,7 @@ export class AddFacebookIdField1706882906661 implements MigrationInterface {
       new TableColumn({
         name: "facebookId",
         type: "varchar",
-      })
+      }),
     );
   }
 

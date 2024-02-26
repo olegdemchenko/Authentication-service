@@ -23,8 +23,8 @@ export default new GoogleStrategy(
     refreshToken: string,
     params: GoogleCallbackParameters,
     profile: Profile,
-    done: VerifyCallback
+    done: VerifyCallback,
   ) => {
     await verifyProfile("google", profile, done);
-  }
+  },
 );

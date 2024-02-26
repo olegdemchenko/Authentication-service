@@ -18,8 +18,8 @@ export default new FacebookStrategy(
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-    done: VerifyCallback
+    done: VerifyCallback,
   ) => {
     await verifyProfile("facebook", profile, done);
-  }
+  },
 );

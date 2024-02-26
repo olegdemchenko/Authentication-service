@@ -49,7 +49,7 @@ dataSource
           secure: true,
           maxAge: 1000 * 60 * 60 * 6,
         },
-      })
+      }),
     );
     app.use(passport.authenticate("session"));
     app.use("/api", router);
@@ -59,7 +59,7 @@ dataSource
         key: readFileSync(path.join(__dirname, "cert", "key.pem")),
         cert: readFileSync(path.join(__dirname, "cert", "cert.pem")),
       },
-      app
+      app,
     );
 
     server.listen(process.env.PORT, () => {

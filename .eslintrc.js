@@ -9,7 +9,7 @@ module.exports = {
     "plugin:node/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
-    "prettier",
+    "plugin:prettier/recommended",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -22,7 +22,7 @@ module.exports = {
       tryExtensions: [".js", ".json", ".node", ".ts"],
     },
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "prettier"],
   root: true,
   rules: {
     "node/no-unsupported-features/es-syntax": [

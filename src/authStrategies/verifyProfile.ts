@@ -9,7 +9,7 @@ import User from "../db/entities/User";
 async function verifyProfile(
   socialMedia: "google" | "facebook",
   profile: GoogleProfile | FacebookProfile,
-  done: VerifyCallback
+  done: VerifyCallback,
 ) {
   const socialMediaIds = {
     google: "googleId",

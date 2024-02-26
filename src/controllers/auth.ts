@@ -22,7 +22,7 @@ const handleLogin = (
   req: Request,
   res: Response,
   next: NextFunction,
-  user: User
+  user: User,
 ) => {
   req.logIn(user, (err) => {
     if (err) {
@@ -60,7 +60,7 @@ class AuthController {
 
   signUp = async (
     req: CustomRequest<{ username: string; password: string; email: string }>,
-    res: Response
+    res: Response,
   ) => {
     const { username, password, email } = req.body;
     const existedUser = await this.userRepository.findOne({
@@ -118,7 +118,7 @@ class AuthController {
   login = (
     req: CustomRequest<{ username: string; password: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     passport.authenticate("local", (err: Error | null, user: User | null) => {
       if (err) {
@@ -143,19 +143,19 @@ class AuthController {
   authenticateGoogleAccount = (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     passport.authenticate("google", { scope: ["profile", "email"] })(
       req,
       res,
-      next
+      next,
     );
   };
 
   handleGoogleAuthRedirect = (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     passport.authenticate(
       "google",
@@ -165,14 +165,14 @@ class AuthController {
           return next(err);
         }
         handleLogin(req, res, next, user);
-      }
+      },
     )(req, res, next);
   };
 
   authenticateFacebookAccount = (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     passport.authenticate("facebook")(req, res, next);
   };
@@ -180,7 +180,7 @@ class AuthController {
   handleFacebookAuthRedirect = (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     passport.authenticate(
       "facebook",
@@ -190,7 +190,7 @@ class AuthController {
           return next(err);
         }
         handleLogin(req, res, next, user);
-      }
+      },
     )(req, res, next);
   };
 }
