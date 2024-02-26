@@ -17,16 +17,31 @@ async function verifyProfile(
   } as const;
 
   const userRepository = dataSource.getRepository(User);
-  const user = await userRepository.findOne({
-    where: { [socialMediaIds[socialMedia]]: profile.id },
-  });
+  const profileEmail = profile?.emails?.[0].value;
+  let user: User | null;
+  if (profileEmail) {
+    user = await userRepository.findOne({
+      where: { email: profileEmail },
+    });
+  } else {
+    user = await userRepository.findOne({
+      where: [{ [socialMediaIds[socialMedia]]: profile.id }],
+    });
+  }
   if (!user) {
     const newUser = new User();
     newUser.name = profile.displayName;
     newUser[socialMediaIds[socialMedia]] = profile.id;
+    if (profileEmail) {
+      newUser.email = profileEmail;
+    }
     await userRepository.save(newUser);
     done(null, newUser);
   } else {
+    if (!user[socialMediaIds[socialMedia]]) {
+      user[socialMediaIds[socialMedia]] = profile.id;
+      await userRepository.save(user);
+    }
     done(null, user);
   }
 }
