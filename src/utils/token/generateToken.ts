@@ -1,17 +1,17 @@
 import { sign } from "jsonwebtoken";
-import dotenv from "dotenv";
+import { type TokenType, tokenSecretsMap, timesToExpire } from "./const";
 
-dotenv.config();
-
-async function generateToken(payload: {
-  userId: number;
-}): Promise<string | Error> {
-  const { VERIFICATION_TOKEN_SECRET } = process.env;
+async function generateToken(
+  type: TokenType,
+  payload: {
+    userId: number;
+  },
+): Promise<string | Error> {
   return new Promise((resolve, reject) => {
     sign(
       payload,
-      VERIFICATION_TOKEN_SECRET!,
-      { expiresIn: 60 * 60 * 3 },
+      tokenSecretsMap[type],
+      { expiresIn: timesToExpire[type] },
       (err, token) => {
         if (err) {
           reject(err);

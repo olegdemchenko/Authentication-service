@@ -1,13 +1,12 @@
 import { verify } from "jsonwebtoken";
-import dotenv from "dotenv";
+import { type TokenType, tokenSecretsMap } from "./const";
 
-dotenv.config();
-
-async function verifyToken(token: string): Promise<{ userId: number } | Error> {
-  const { VERIFICATION_TOKEN_SECRET } = process.env;
-
+async function verifyToken(
+  type: TokenType,
+  token: string,
+): Promise<{ userId: number } | Error> {
   return new Promise((resolve, reject) => {
-    verify(token, VERIFICATION_TOKEN_SECRET!, (err, payload) => {
+    verify(token, tokenSecretsMap[type], (err, payload) => {
       if (err) {
         reject(err);
       } else {

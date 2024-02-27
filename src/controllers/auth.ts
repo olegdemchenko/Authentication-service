@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import bcrypt from "bcrypt";
-import _ from "lodash";
 import { CustomRequest } from "../types";
 import local from "../authStrategies/local";
 import google from "../authStrategies/google";
 import facebook from "../authStrategies/facebook";
+import bearer from "../authStrategies/bearer";
 import dataSource from "../db/dataSource";
 import User from "../db/entities/User";
 import sendVerificationEmail from "../utils/email/sendVerificationEmail";
@@ -15,6 +15,7 @@ import verifyToken from "../utils/token/verifyToken";
 passport.use(local);
 passport.use(google);
 passport.use(facebook);
+passport.use(bearer);
 
 type RequestUser = Express.User & { id: number };
 
@@ -24,11 +25,14 @@ const handleLogin = (
   next: NextFunction,
   user: User,
 ) => {
-  req.logIn(user, (err) => {
+  req.logIn(user, async (err) => {
     if (err) {
       return next(err);
     }
-    res.status(200).json(_.pick(user, ["name"]));
+    const authToken = await generateToken("user_authorization", {
+      userId: user.id,
+    });
+    res.status(200).json({ name: user.name, authToken });
   });
 };
 
@@ -55,7 +59,21 @@ class AuthController {
     if (!user) {
       return res.status(400).json({ message: "user not found" });
     }
-    res.status(200).json(_.pick(user, ["name"]));
+    res.status(200).json({ name: user.name });
+  };
+
+  authenticateUser = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "bearer",
+      { session: false },
+      (err: Error | null, user: User | null) => {
+        if (err) {
+          return next(err);
+        }
+        console.log("user", user);
+        return res.status(200).json(user);
+      },
+    )(req, res, next);
   };
 
   signUp = async (
@@ -84,7 +102,9 @@ class AuthController {
     newUser.password = hashedPassword;
     newUser.email = email;
     await this.userRepository.save(newUser);
-    const token = await generateToken({ userId: newUser.id });
+    const token = await generateToken("email_verification", {
+      userId: newUser.id,
+    });
     await sendVerificationEmail(email, token as string);
     res
       .status(200)
@@ -93,7 +113,7 @@ class AuthController {
 
   verifyEmail = async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.query;
-    const payload = await verifyToken(token as string);
+    const payload = await verifyToken("email_verification", token as string);
     if (payload instanceof Error) {
       return res.status(409).json({ message: `Sorry, invalid link` });
     }

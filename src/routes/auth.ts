@@ -12,6 +12,7 @@ router
   .get("/google", AuthController.authenticateGoogleAccount)
   .get("/google-redirect", AuthController.handleGoogleAuthRedirect)
   .get("/facebook", AuthController.authenticateFacebookAccount)
-  .get("/facebook-redirect", AuthController.handleFacebookAuthRedirect);
+  .get("/facebook-redirect", AuthController.handleFacebookAuthRedirect)
+  .get("/authenticate", AuthController.authenticateUser);
 
 export default router;
