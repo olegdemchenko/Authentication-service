@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import bcrypt from "bcrypt";
+import _ from "lodash";
 import { CustomRequest } from "../types";
 import local from "../strategies/local";
 import google from "../strategies/google";
@@ -32,7 +33,9 @@ const handleLogin = (
     const authToken = await generateToken("user_authorization", {
       userId: user.id,
     });
-    res.status(200).json({ name: user.name, authToken });
+    res
+      .status(200)
+      .json({ ..._.pick(user, ["name", "email", "isVerified"]), authToken });
   });
 };
 
@@ -59,7 +62,7 @@ class AuthController {
     if (!user) {
       return res.status(400).json({ message: "user not found" });
     }
-    res.status(200).json({ name: user.name });
+    res.status(200).json({ ..._.pick(user, ["name", "email", "isVerified"]) });
   };
 
   authenticateUser = (req: Request, res: Response, next: NextFunction) => {
