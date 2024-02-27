@@ -1,7 +1,7 @@
 {
-  "name": "chat-app",
+  "name": "auth-service",
   "version": "1.0.0",
-  "description": "A Node.js chat application",
+  "description": "A Node.js authentication service",
   "main": "index.js",
   "engines": {
     "node": ">=18.0.0"
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olegdemchenko/chat-app.git"
+    "url": "git+https://github.com/olegdemchenko/Authentication-service.git"
   },
   "author": "Oleg Demchenko",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/olegdemchenko/chat-app/issues"
+    "url": "https://github.com/olegdemchenko/Authentication-service/issues"
   },
-  "homepage": "https://github.com/olegdemchenko/chat-app#readme",
+  "homepage": "https://github.com/olegdemchenko/Authentication-service#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-redis": "^7.1.0",
