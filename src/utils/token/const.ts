@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { sessionExpiration, emailVerificationExpiration } from "../../consts";
 
 dotenv.config();
 
@@ -10,8 +11,8 @@ const tokenSecretsMap = {
 };
 
 const timesToExpire = {
-  email_verification: "3h",
-  user_authorization: "6h",
+  email_verification: `${emailVerificationExpiration / 3600}h`,
+  user_authorization: `${sessionExpiration / 3600}h`,
 };
 
 export { TokenType, tokenSecretsMap, timesToExpire };

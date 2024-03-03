@@ -12,11 +12,15 @@ import User from "../db/entities/User";
 import sendVerificationEmail from "../utils/email/sendVerificationEmail";
 import generateToken from "../utils/token/generateToken";
 import verifyToken from "../utils/token/verifyToken";
+import redisClient from "../redisClient";
+import { sessionExpiration } from "../consts";
 
 passport.use(local);
 passport.use(google);
 passport.use(facebook);
 passport.use(bearer);
+
+const getUserTokenKey = (id: number) => `${id}_authToken`;
 
 type RequestUser = Express.User & { id: number };
 
@@ -33,9 +37,15 @@ const handleLogin = (
     const authToken = await generateToken("user_authorization", {
       userId: user.id,
     });
-    res
-      .status(200)
-      .json({ ..._.pick(user, ["name", "email", "isVerified"]), authToken });
+    await (
+      await redisClient
+    ).set(getUserTokenKey(user.id), authToken as string, {
+      EX: sessionExpiration,
+    });
+    res.status(200).json({
+      user: _.pick(user, ["name", "email", "isVerified"]),
+      token: authToken,
+    });
   });
 };
 
@@ -62,7 +72,10 @@ class AuthController {
     if (!user) {
       return res.status(400).json({ message: "user not found" });
     }
-    res.status(200).json({ ..._.pick(user, ["name", "email", "isVerified"]) });
+    const token = await (await redisClient).get(getUserTokenKey(user.id));
+    res
+      .status(200)
+      .json({ user: _.pick(user, ["name", "email", "isVerified"]), token });
   };
 
   authenticateUser = (req: Request, res: Response, next: NextFunction) => {
@@ -73,7 +86,6 @@ class AuthController {
         if (err) {
           return next(err);
         }
-        console.log("user", user);
         return res.status(200).json(user);
       },
     )(req, res, next);
@@ -155,10 +167,12 @@ class AuthController {
   };
 
   logout = (req: Request, res: Response, next: NextFunction) => {
-    req.logOut((err) => {
+    const user = req.user as { id: number };
+    req.logOut(async (err) => {
       if (err) {
         return next(err);
       }
+      await (await redisClient).del(getUserTokenKey(user.id));
       res.status(200).json({ status: "success" });
     });
   };
