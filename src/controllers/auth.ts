@@ -212,7 +212,7 @@ class AuthController {
         if (err) {
           return next(err);
         }
-        handleLogin(req, res, next, user);
+        handleLogin(req, res, next, user, "http://localhost:3000/chat");
       },
     )(req, res, next);
   };
@@ -237,7 +237,7 @@ class AuthController {
         if (err) {
           return next(err);
         }
-        handleLogin(req, res, next, user);
+        handleLogin(req, res, next, user, "http://localhost:3000/chat");
       },
     )(req, res, next);
   };
