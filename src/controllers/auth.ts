@@ -29,6 +29,7 @@ const handleLogin = (
   res: Response,
   next: NextFunction,
   user: User,
+  redirectUrl?: string,
 ) => {
   req.logIn(user, async (err) => {
     if (err) {
@@ -42,10 +43,14 @@ const handleLogin = (
     ).set(getUserTokenKey(user.id), authToken as string, {
       EX: sessionExpiration,
     });
-    res.status(200).json({
-      user: _.pick(user, ["name", "email", "isVerified"]),
-      token: authToken,
-    });
+    if (redirectUrl) {
+      res.redirect(redirectUrl);
+    } else {
+      res.status(200).json({
+        user: _.pick(user, ["name", "email", "isVerified"]),
+        token: authToken,
+      });
+    }
   });
 };
 
@@ -147,7 +152,13 @@ class AuthController {
 
     user.isVerified = true;
     await this.userRepository.save(user);
-    handleLogin(req, res, next, user);
+    handleLogin(
+      req,
+      res,
+      next,
+      user,
+      "http://localhost:3000/email_verify_success",
+    );
   };
 
   login = (
