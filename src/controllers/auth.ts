@@ -89,7 +89,7 @@ class AuthController {
       { session: false },
       (err: Error | null, user: User | null) => {
         if (err) {
-          return next(err);
+          return res.status(400).json({ message: "invalid token" });
         }
         return res.status(200).json(user);
       },
