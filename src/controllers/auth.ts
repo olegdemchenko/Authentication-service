@@ -91,7 +91,9 @@ class AuthController {
         if (err) {
           return res.status(400).json({ message: "invalid token" });
         }
-        return res.status(200).json(user);
+        return res
+          .status(200)
+          .json({ ..._.pick(user, ["id", "name", "email"]) });
       },
     )(req, res, next);
   };
