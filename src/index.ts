@@ -1,11 +1,8 @@
 import express from "express";
 import session from "express-session";
 import dotenv from "dotenv";
-import https from "https";
 import cookieParser from "cookie-parser";
 import passport from "passport";
-import path from "path";
-import { readFileSync } from "fs";
 
 import RedisStore from "connect-redis";
 import dataSource from "./db/dataSource";
@@ -40,15 +37,7 @@ dataSource
     app.use(passport.authenticate("session"));
     app.use("/api", router);
 
-    const server = https.createServer(
-      {
-        key: readFileSync(path.join(__dirname, "cert", "key.pem")),
-        cert: readFileSync(path.join(__dirname, "cert", "cert.pem")),
-      },
-      app,
-    );
-
-    server.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, () => {
       console.log(`Server listens at ${process.env.PORT}`);
     });
   })
