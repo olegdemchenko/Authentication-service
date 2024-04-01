@@ -5,14 +5,7 @@ services:
       target: dev
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-      - 9229:9229
-    environment:
-      - PORT=${PORT}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - ${SERVER_DEBUG_PORT}:${SERVER_DEBUG_PORT}
     depends_on:
       db:
         condition: service_healthy
@@ -28,9 +21,9 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     expose:
-      - 5432
+      - ${POSTGRES_PORT}
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 10s
@@ -40,8 +33,8 @@ services:
     image: redis
     restart: always
     ports:
-      - 6379:6379
+      - ${REDIS_PORT}:${REDIS_PORT}
     expose:
-      - 6379
+      - ${REDIS_PORT}
 volumes:
   db-data:
