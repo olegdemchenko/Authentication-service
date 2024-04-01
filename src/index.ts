@@ -37,8 +37,8 @@ dataSource
     app.use(passport.authenticate("session"));
     app.use("/api", router);
 
-    app.listen(process.env.PORT, () => {
-      console.log(`Server listens at ${process.env.PORT}`);
+    app.listen(process.env.SERVER_PORT, () => {
+      console.log(`Server listens at ${process.env.SERVER_PORT}`);
     });
   })
   .catch((e) => console.log("data source initialization error", e));

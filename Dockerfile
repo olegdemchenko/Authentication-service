@@ -1,6 +1,6 @@
 FROM node:20-alpine as base
 WORKDIR /app
-EXPOSE 443
+EXPOSE ${SERVER_PORT}
 
 FROM base as dev
 RUN --mount=type=bind,source=package.json,target=package.json \

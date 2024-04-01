@@ -4,7 +4,7 @@ services:
       context: .
       target: dev
     ports:
-      - 443:443
+      - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
     environment:
       - PORT=${PORT}
