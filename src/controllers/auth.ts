@@ -44,13 +44,12 @@ const handleLogin = (
       EX: sessionExpiration,
     });
     if (redirectUrl) {
-      res.redirect(redirectUrl);
-    } else {
-      res.status(200).json({
-        user: _.pick(user, ["name", "email", "isVerified"]),
-        token: authToken,
-      });
+      return res.redirect(redirectUrl);
     }
+    return res.status(200).json({
+      user: _.pick(user, ["name", "email", "isVerified"]),
+      token: authToken,
+    });
   });
 };
 
