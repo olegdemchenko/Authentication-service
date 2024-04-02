@@ -29,7 +29,7 @@ dataSource
         saveUninitialized: false,
         secret: process.env.SESSION_SECRET!,
         cookie: {
-          secure: true,
+          httpOnly: true,
           maxAge: 1000 * sessionExpiration,
         },
       }),
